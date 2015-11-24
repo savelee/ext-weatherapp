@@ -18,6 +18,8 @@ To run these files, you wil need to have a copy of Sencha Touch 2, and Ext JS 6.
 
 1. Check out this project
 2. Generate a Sencha Touch project into this workspace, to get the *touch* folder
+
  touch >  `sencha generate app Dinmu ../touchdinmu`
 3. Generate an Ext JS 6 project into this workspace, to get the *ext* folder
+
  ext > `sencha generate app -modern Dinmu ../dinmu1`
