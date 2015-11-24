@@ -1,0 +1,25 @@
+/*
+ * This is is imported by virtue of "sass.var" in "app.json".
+ */
+
+$enable-font-awesome: dynamic(true);
+$dark-theme: false;
+$page-bg-color: #f2f2f2;
+$confirm-color: #FFA500;
+$form-bg-color: $page-bg-color;
+
+//neptune vars
+$background-color: $page-bg-color;
+$base-color: lighten(black, 30%);
+$alternative-color: lighten(#494949, 5%);
+$alert-color: #B0886D;
+
+//cupertino vars
+$ios7-blue: $confirm-color;
+
+
+//mountainview vars
+$background-color: $page-bg-color;
+$secondary-color: $confirm-color;
+$primary-text-color: #000;
+$secondary-text-color: #000;

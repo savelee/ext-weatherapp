@@ -1,0 +1,83 @@
+@import url(http://fonts.googleapis.com/css?family=Oswald:700);
+@import url(http://fonts.googleapis.com/css?family=Lobster);
+
+.x-button-back {
+  display: flex !important;
+}
+.x-button-back.x-item-hidden {
+  display: none !important;
+}
+
+body {
+  background: $page-bg-color;
+	font-family: HelveticaNeue-Light, Helvetica, sans-serif;
+	letter-spacing: 1px;
+}
+
+.x-form-label span {
+  letter-spacing: 1px;
+	font: {
+		family: HelveticaNeue-Light, Helvetica, sans-serif;
+	}
+}
+
+.title {
+	.x-title {
+	    font: {
+	        family: "Lobster";
+	        size: 1.5em;
+	    }
+	    //line-height: 2.5em;
+	    text-shadow: none;
+   		letter-spacing: -1px;
+	}
+}
+
+.x-mask-message,
+.x-button {
+  text-shadow: none;
+	letter-spacing: -1px;
+}
+
+.x-form-fieldset-title {
+    font: {
+        family: "Lobster";
+        size: 1.4em;
+    }
+    margin: 1em 0.5em 0.5em 1em;
+}
+
+.footer {
+    padding: 12px;
+    text-align: right;
+    letter-spacing: 0;
+    font: {
+        family: "Lobster";
+        size: 1em;
+    }
+    a {
+        color :#000;
+    }
+}
+
+.textview {
+    color: black;
+    font: {
+        family: "Oswald";
+        size: 1.8em;
+    }
+    line-height: 1.2em;
+    letter-spacing: -1px;
+    padding: 1em;
+    text-transform: uppercase;
+
+    .yes {
+        color: $confirm-color;
+    }
+    .no {
+        color: $confirm-color;
+    }
+    .temp {
+        color: $confirm-color;
+    }
+}
