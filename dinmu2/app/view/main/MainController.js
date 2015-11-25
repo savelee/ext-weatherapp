@@ -1,7 +1,53 @@
 Ext.define('Dinmu.view.main.MainController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.main',
+    requires: [
+      'Ext.Deferred'
+    ],
 
+    removeAllSettings: function(){
+      var d = new Ext.Deferred();
+      var store = Ext.getStore('Settings');
+      //console.log(store.getCount());
+      if(store.getCount() == 0){
+        d.resolve();
+      } else {
+        //console.log("remove settings");
+
+        store.removeAll();
+        store.sync({
+          success: function(recs){
+            d.resolve(recs);
+          },
+          failure: function(e){
+            d.reject(e);
+          }
+        });
+      }
+
+      return d.promise;
+    },
+    addSettings: function(record){
+      var d = new Ext.Deferred();
+      if(record){
+        var store = Ext.getStore('Settings');
+        store.add(record);
+        //console.log("adding settings: " + record);
+
+        store.sync({
+          failure: function(e){
+            d.reject(e);
+          },
+          success: function(recs){
+            d.resolve(recs);
+          }
+        });
+      } else {
+        d.resolve();
+      }
+
+      return d.promise;
+    },
     onRefresh: function() {
        Ext.Viewport.setMasked({
            xtype: 'loadmask',
@@ -11,10 +57,8 @@ Ext.define('Dinmu.view.main.MainController', {
 
        var errorstring = "";
        var store = Ext.getStore('Settings');
-       //remove previous settings
-       store.removeAll();
-       store.sync();
 
+       //validate
        var model = Ext.create("Dinmu.model.Setting", {});
        this.lookupReference('settings').updateRecord(model);
        var errors = model.validate();
@@ -26,12 +70,24 @@ Ext.define('Dinmu.view.main.MainController', {
 
            Ext.Msg.alert("Oops", errorstring);
        } else {
-         store.add(model);
-         store.sync();
-         Dinmu.utils.Functions.loadData();
-       }
-
-
+         var me = this;
+         me.removeAllSettings().then(
+           function(records){
+             //console.log("remove ok");
+             me.addSettings(model).then(function(){
+              //console.log("add ok, now load data");
+              Dinmu.utils.Functions.loadData();
+             });
+           },
+           function(error){
+             //<debug>
+             console.error(error);
+             //</debug>
+           }
+         ).always(function(){
+             Ext.Viewport.setMasked(false);
+           });
+         }
     },
 
     /* When enabling the toggle button, all fields needs a reset and

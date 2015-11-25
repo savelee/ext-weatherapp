@@ -63,7 +63,20 @@ Ext.define('Dinmu.utils.Functions', {
 					if (city && country) {
 						if(country == "US" || country == "USA") country = "United States Of America";
 
-						Dinmu.utils.Functions.getWeather(city + " " + country);
+						Dinmu.utils.Functions.getWeather(city + " " + country).then(function(result){
+              Ext.Viewport.unmask();
+      				try {
+      					var weather = result.weather;
+      					Dinmu.utils.Functions.createTemplate(weather[0]);
+
+      				} catch (e) {
+      					if(result.error){
+      						Ext.Msg.alert("Error", result.error[0].msg);
+      					} else {
+      						Ext.Msg.alert("Oops", e);
+      					}
+      				}
+            });
 					} else {
 						//There are no city settings saved,
 						//get location from Geolocation.
@@ -128,34 +141,27 @@ Ext.define('Dinmu.utils.Functions', {
 	and amount of days to get the weather forcast from.
 	*/
 	getWeather: function(place) {
-		Ext.data.JsonP.request({
-			url: '//api.worldweatheronline.com/free/v1/weather.ashx',
-			params: {
-				key: Dinmu.utils.Functions.API_KEY,
-				q: place,
-				format: 'json',
-				num_of_days: 1
-			},
-			success: function(result, request) {
-				//console.log(result.data);
-				Ext.Viewport.unmask();
-				try {
-					var weather = result.data.weather;
-					Dinmu.utils.Functions.createTemplate(weather[0]);
+    return new Ext.Promise(function (resolve, reject) {
+      Ext.data.JsonP.request({
+        url: '//api.worldweatheronline.com/free/v1/weather.ashx',
+        params: {
+          key: Dinmu.utils.Functions.API_KEY,
+          q: place,
+          format: 'json',
+          num_of_days: 1
+        },
+        success: function(result, request) {
+          resolve(result.data);
+        },
+        failure: function(e) {
+          reject(e);
 
-				} catch (e) {
-					if(result.data.error){
-						Ext.Msg.alert("Error", result.data.error[0].msg);
-					} else {
-						Ext.Msg.alert("Oops", e);
-					}
-				}
-			},
-			failure: function(e) {
-				Ext.Viewport.unmask();
-				Ext.Msg.alert("Oops", "Can not request data from worldweatheronline.com");
-			}
-		});
+          Ext.Viewport.unmask();
+          Ext.Msg.alert("Oops", "Can not request data from worldweatheronline.com");
+
+        }
+    });
+  });
 	},
 
 	/*
