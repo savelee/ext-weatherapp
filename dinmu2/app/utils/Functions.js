@@ -38,6 +38,7 @@ Ext.define('Dinmu.utils.Functions', {
 
 		Ext.getStore('Settings').load({
 			callback: function(records, operation, success) {
+        var view = Ext.ComponentQuery.query('settingsview')[0];
 
 				if (records.length > 0) {
 
@@ -49,16 +50,16 @@ Ext.define('Dinmu.utils.Functions', {
 
 					//prefill all fields
 					if(!geo){
-						Ext.ComponentQuery.query('settingsview togglefield[name=geo]')[0].setValue(0);
+						view.down('togglefield[name=geo]').setValue(0);
 					} else {
-						Ext.ComponentQuery.query('settingsview togglefield[name=geo]')[0].setValue(1);
+						view.down('togglefield[name=geo]').setValue(1);
 					}
 
-					Ext.ComponentQuery.query('settingsview selectfield[name=units]')[0].setValue(units);
-					Ext.ComponentQuery.query('settingsview textfield[name=city]')[0].enable();
-					Ext.ComponentQuery.query('settingsview textfield[name=city]')[0].setValue(city);
-					Ext.ComponentQuery.query('settingsview textfield[name=country]')[0].enable();
-					Ext.ComponentQuery.query('settingsview textfield[name=country]')[0].setValue(country);
+					view.down('selectfield[name=units]').setValue(units);
+					view.down('textfield[name=city]').enable();
+					view.down('textfield[name=city]').setValue(city);
+					view.down('textfield[name=country]').enable();
+					view.down('textfield[name=country]').setValue(country);
 
 					if (city && country) {
 						if(country == "US" || country == "USA") country = "United States Of America";
@@ -158,7 +159,6 @@ Ext.define('Dinmu.utils.Functions', {
 
           Ext.Viewport.unmask();
           Ext.Msg.alert("Oops", "Can not request data from worldweatheronline.com");
-
         }
     });
   });
@@ -219,10 +219,13 @@ Ext.define('Dinmu.utils.Functions', {
 				return isRain;
 			},
 			getCity: function() {
-				var city = "";
+				var city = "",
+          s = Ext.getStore('Settings'),
+          data = s.getData();
+
 				try {
-					if (Ext.getStore('Settings').getData().length > 0 && !Ext.getStore('Settings').getData().getAt(0).get('geo')) {
-						var city = Ext.getStore('Settings').getData().getAt(0).get('city');
+					if (data.length > 0 && !data.getAt(0).get('geo')) {
+						var city = data.getAt(0).get('city');
 						city = " in " + city;
 					}
 				} catch (e) {
@@ -231,10 +234,13 @@ Ext.define('Dinmu.utils.Functions', {
 				return city;
 			},
 			isC: function() {
-				var isC = false;
+				var isC = false,
+        s = Ext.getStore('Settings'),
+        data = s.getData();
+
 				try {
-					if (Ext.getStore('Settings').getData().length > 0) {
-						var units = Ext.getStore('Settings').getData().getAt(0).get('units');
+					if (data.length > 0) {
+						var units = data.getAt(0).get('units');
 						if (units === "c") isC = true;
 					}
 				} catch (e) {
@@ -245,10 +251,10 @@ Ext.define('Dinmu.utils.Functions', {
 		});
 
 		var html = tpl.apply(obj);
+    var main = Ext.ComponentQuery.query('main')[0];
 
 		Ext.ComponentQuery.query('button[action=back]')[0].hide();
-		Ext.ComponentQuery.query('main')[0].setActiveItem(1);
-
-		Ext.ComponentQuery.query('main')[0].getActiveItem().setHtml(html);
+		main.setActiveItem(1);
+    main.getActiveItem().setHtml(html);
 	}
 });

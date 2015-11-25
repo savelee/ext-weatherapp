@@ -85,7 +85,7 @@ Ext.define('Dinmu.view.main.MainController', {
              //</debug>
            }
          ).always(function(){
-             Ext.Viewport.setMasked(false);
+             Ext.Viewport.unmask();
            });
          }
     },
